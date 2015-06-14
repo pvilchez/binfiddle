@@ -4,11 +4,14 @@ var FB = require('fb');
 var _ = require('underscore');
 var https = require('https');
 var config = require('../config.js');
+var Redis = require('ioredis');
 
+var redis = new Redis();
 var sum = {};
 var average = {};
 var lastDate = {};
 var length = {};
+var count = {};
 
 var headers = {
     'User-Agent': 'Super Agent/0.0.1',
@@ -25,6 +28,11 @@ var getAnalyzeSentimentOpt = function(text) {
   };
 };
 var getConversationSentiment = function(conversation, name) {
+  sentiment = redis.get(name);
+  if (sentiment !== null && sentiment !== 0 && sentiment !== undefined) {
+    console.log("taking the easy way out, we already have a value for " + name);
+    return;
+  }
   console.log('convo sentiment:');
   if (sum[name] == undefined){
       sum[name] = 0;
@@ -37,6 +45,9 @@ var getConversationSentiment = function(conversation, name) {
   }
   if (length[name] == undefined) {
       length[name] = conversation.length;
+  }
+  if (count[name] == undefined) {
+      count[name] = 0;
   }
   //console.log(name);
  // console.log(conversation);
@@ -53,8 +64,12 @@ var getConversationSentiment = function(conversation, name) {
         response.on('end', function() {
           var json = JSON.parse(str);
           if (json.aggregate){
-          sum[name] += parseFloat(json.aggregate.score);
-  console.log(name+ 'sum (running):' + sum[name]);
+            average[name] += parseFloat(json.aggregate.score) / length[name];
+            console.log(name + ' average (running):' + average[name]);
+          }
+          count[name] += 1;
+          if (count[name] == length[name]) {
+            redis.set(name, average[name]);
           }
 //          var score = parseFloat(json.aggregate.score * 100).toFixed(2);
         });
@@ -62,6 +77,7 @@ var getConversationSentiment = function(conversation, name) {
             console.log(res);
         });
       });
+
   });
   average[name] = sum[name] / length[name];
 
