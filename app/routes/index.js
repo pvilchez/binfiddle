@@ -32,7 +32,8 @@ router.get('/', function(req, res, next) {
       global_sentiment = json;
       console.log(global_sentiment);
       console.log(json.aggregate.score);
-      res.render('index', { title: config.hostUrl, score: json.aggregate.score});
+      var score = parseFloat(json.aggregate.score * 100).toFixed(2);
+      res.render('index', { title: config.hostUrl, score: score});
     });
   });
 });
