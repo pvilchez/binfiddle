@@ -108,7 +108,7 @@ var load_sentiments = function(conversations) {
 
 /* GET home page. */
 router.get('/facebook', function(req, res, next) {
-  res.render('facebook');
+  res.render('facebook', {application_id: config.facebook.application_id});
 });
 
 router.get('/load_facebook', function(req, res, next) {
