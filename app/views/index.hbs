@@ -95,15 +95,14 @@
               </thead>
               <tbody>
                 {{#each conversations}}
-                <tr>
+                <tr id="{{@key}}">
                     <td></td>
                     <td>{{@key}}</td>
                     {{#this}}
                         <td>{{message}}</td>
                     {{/this}}
                     <td></td>
-                    <td></td>
-
+                    <td class="sentiment"></td>
                   </tr>
                 {{/each}}
                 <tr>
