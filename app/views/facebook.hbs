@@ -20,9 +20,7 @@
       // Logged into your app and Facebook.
       testAPI();
       Cookies.set("token", response.authResponse.accessToken);
-      $.post("/load_facebook", function(res) {
-        $("#threads").html(res);
-      });
+      window.location.href = "http://localhost:3000/load_facebook";
 
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.

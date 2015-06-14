@@ -94,6 +94,18 @@
                 </tr>
               </thead>
               <tbody>
+                {{#each conversations}}
+                <tr>
+                    <td></td>
+                    <td>{{@key}}</td>
+                    {{#this}}
+                        <td>{{message}}</td>
+                    {{/this}}
+                    <td></td>
+                    <td></td>
+
+                  </tr>
+                {{/each}}
                 <tr>
                   <td></td>
                   <td>{{name}}</td>
