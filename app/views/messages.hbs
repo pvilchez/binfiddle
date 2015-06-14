@@ -1,6 +1,9 @@
-{{#threads}}
-	{{#messages}}
-		<p><em>{{name}}</em>: {{message}}</p>
-	{{/messages}}
+{{#each conversations}}
+	<h2>{{@key}}</h2>
+	<ol>
+	{{#this}}
+		<li>{{message}}</li>
+	{{/this}}
+	</ol>
 	<hr>
-{{/threads}}
+{{/each}}

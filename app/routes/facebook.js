@@ -3,21 +3,25 @@ var router = express.Router();
 var FB = require('fb');
 var _ = require('underscore');
 
-var get_threads = function(response) {
-  return _.map(response.data, function(thread) {
+var get_conversations = function(response) {
+  var name, conversations = {};
+  _.each(response.data, function(thread) {
     if (thread.comments) {
-      var messages = _.map(thread.comments.data, function(comment) {
-        return {
-          name: comment.from.name,
+      _.each(thread.comments.data, function(comment) {
+        name = comment.from.name;
+        if (conversations[name] === undefined) {
+          conversations[name] = [];
+        }
+        console.log("adding message to conversation with " + name);
+        conversations[name].push({
           message: comment.message,
           created_time: comment.created_time
-        }
+        });
       });
-      return {
-        messages: messages
-      }
     }
   });
+  console.log(_.keys(conversations));
+  return conversations;
 }
 
 /* GET home page. */
@@ -27,7 +31,7 @@ router.get('/facebook', function(req, res, next) {
 
 router.post('/load_facebook', function(req, res, next) {
   FB.api('/me/inbox', {access_token: req.cookies.token}, function(response) {
-    res.render('messages', {threads: get_threads(response)});
+    res.render('messages', {conversations: get_conversations(response)});
   });
 });
 
