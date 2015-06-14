@@ -5,19 +5,20 @@ var _ = require('underscore');
 var https = require('https');
 var config = require('../config.js');
 var Redis = require('ioredis');
-
 var redis = new Redis();
+
 var sum = {};
 var average = {};
 var lastDate = {};
 var length = {};
 var count = {};
 
-var headers = {
+var getAnalyzeSentimentOpt = function(text) {
+  var headers = {
     'User-Agent': 'Super Agent/0.0.1',
     'Content-Type': 'application/x-www-form-urlencoded'
-};
-var getAnalyzeSentimentOpt = function(text) {
+  };
+
   return {
     host: config.hpHostUrl,
     port: 443,
@@ -27,15 +28,16 @@ var getAnalyzeSentimentOpt = function(text) {
     headers: headers
   };
 };
+
 var getConversationSentiment = function(conversation, name) {
-  console.log('convo sentiment:');
+  console.log('calculating convo sentiment for: ' + name);
   if (sum[name] == undefined){
       sum[name] = 0;
   }
   if (average[name] == undefined){
       average[name] = 0;
   }
-  if (lastDate[name] ==undefined){
+  if (lastDate[name] == undefined){
       lastDate[name] = '';
   }
   if (length[name] == undefined) {
@@ -44,46 +46,34 @@ var getConversationSentiment = function(conversation, name) {
   if (count[name] == undefined) {
       count[name] = 0;
   }
-  //console.log(name);
- // console.log(conversation);
-  console.log('length:' + conversation.length);
   _.each(conversation, function(entry) {
-      console.log(entry.message);
-      lastDate[name] = entry.created_time;
-      var text = getAnalyzeSentimentOpt(entry.message);
-      var sent = https.get(text, function(response) {
-        var str = '';
-        response.on('data', function(chunk) {
-          str += chunk;
-        });
-        response.on('end', function() {
-          var json = JSON.parse(str);
-          if (json.aggregate){
-            average[name] += parseFloat(json.aggregate.score) / length[name];
-            console.log(name + ' average (running):' + average[name]);
-          }
-          count[name] += 1;
-          if (count[name] == length[name]) {
-            redis.set(name, average[name]);
-          }
-//          var score = parseFloat(json.aggregate.score * 100).toFixed(2);
-        });
-        response.on('error', function(res) {
-            console.log(res);
-        });
+    lastDate[name] = entry.created_time;
+    var sent = https.get(getAnalyzeSentimentOpt(entry.message), function(response) {
+      var str = '';
+
+      response.on('data', function(chunk) {
+        str += chunk;
       });
 
+      response.on('end', function() {
+        var json = JSON.parse(str);
+
+        if (json.aggregate){
+          average[name] += parseFloat(json.aggregate.score) / length[name];
+        }
+
+        count[name] += 1;
+        if (count[name] == length[name]) {
+          redis.set(name, average[name]);
+          console.log('convo sentiment for: ' + name + " set to " + average[name]);
+        }
+      });
+
+      response.on('error', function(res) {
+        console.log(res);
+      });
+    });
   });
-  average[name] = sum[name] / length[name];
-
-  console.log(name +' avg:' + average[name]);
-  console.log(name +' sum:' + sum[name]);
-
-  return {
-    name: name,
-    sentiment: average[name],
-    last_communication: lastDate[name]
-  };
 }
 
 var get_conversations = function(response) {
@@ -94,8 +84,8 @@ var get_conversations = function(response) {
         name = comment.from.name;
         if (conversations[name] === undefined) {
           conversations[name] = [];
+          console.log("adding conversation with " + name + ".");
         }
-        console.log("adding message to conversation with " + name);
         conversations[name].push({
           message: comment.message,
           created_time: comment.created_time
@@ -103,8 +93,17 @@ var get_conversations = function(response) {
       });
     }
   });
-  //console.log(_.keys(conversations));
   return conversations;
+}
+
+var load_sentiments = function(conversations) {
+  _.each(conversations, function(conversation, name){
+    redis.get(name).then(function (sentiment) {
+      if (sentiment === null || sentiment === 0 && sentiment === undefined) {
+        getConversationSentiment(conversation, name);
+      }
+    });
+  });
 }
 
 /* GET home page. */
@@ -113,30 +112,9 @@ router.get('/facebook', function(req, res, next) {
 });
 
 router.get('/load_facebook', function(req, res, next) {
-    console.log('load_fb');
   FB.api('/me/inbox', {access_token: req.cookies.token}, function(response) {
-    console.log(_.keys(response.error));
-    console.log('what what');
     var conversations = get_conversations(response);
-    var aggregate = [];
-    //var i=0;
-    _.each(conversations, function(conversation, name){
-      //if (i != 0 && i < 2){
-        redis.get(name).then(function (sentiment) {
-          if (sentiment !== null && sentiment !== 0 && sentiment !== undefined) {
-            console.log("taking the easy way out, we already have a value for " + name);
-          } else {
-            aggregate.push(getConversationSentiment(conversation, name));
-          }
-        });
-      //}
-     // i++;
-    });
-    console.log(aggregate);
-    _.keys(conversations, function() {
-    
-    console.log(average[name]);
-    });
+    load_sentiments(conversations);
     res.render('index', {conversations: conversations});
   });
 });
