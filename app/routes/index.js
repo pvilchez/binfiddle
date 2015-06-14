@@ -28,9 +28,11 @@ router.get('/', function(req, res, next) {
     });
     response.on('end', function() {
       var json = JSON.parse(str);
+
       global_sentiment = json;
       console.log(global_sentiment);
-      res.render('index', { title: config.hostUrl });
+      console.log(json.aggregate.score);
+      res.render('index', { title: config.hostUrl, score: json.aggregate.score});
     });
   });
 });
