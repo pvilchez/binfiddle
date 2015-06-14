@@ -1,0 +1,65 @@
+//colors
+$color_gallery_approx: #eee;
+$white: #fff;
+$color_boston_blue_approx: #428bca;
+
+$primary-color-dark:   #1976D2;
+$primary-color:        #428bca;
+$primary-color-light:  #BBDEFB;
+$primary-color-text:   #FFFFFF;
+$accent-color:         #607D8B;
+$primary-text-color:   #212121;
+$secondary-text-color: #727272;
+$divider-color:        #B6B6B6;
+
+.navbar-brand {
+    font-family: 'Abel', sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Abel', sans-serif;
+}
+
+body {
+    padding-top: 50px;
+}
+.sub-header {
+    padding-bottom: 10px;
+    border-bottom: 1px solid $color_gallery_approx;
+}
+.navbar-inverse .navbar-nav>li>a {
+        color: $primary-color-text;
+}
+.navbar-fixed-top {
+    border: 0;
+    background-color: $primary-color;
+    a.navbar-brand {
+      color: $primary-color-text;
+    }
+}
+@media(min-width: 768px) {
+    .main {
+        padding-right: 40px;
+        padding-left: 40px;
+    }
+}
+.main {
+    padding: 20px;
+    .page-header {
+        margin-top: 0;
+    }
+}
+.placeholders {
+    margin-bottom: 30px;
+    text-align: center;
+    h4 {
+        margin-bottom: 0;
+    }
+}
+.placeholder {
+    margin-bottom: 20px;
+    img {
+        display: inline-block;
+        //Instead of the line below you could use @includeborder-radius($radius, $vertical-radius)
+        border-radius: 50%;
+    }
+}
