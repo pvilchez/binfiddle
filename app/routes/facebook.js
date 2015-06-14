@@ -28,11 +28,6 @@ var getAnalyzeSentimentOpt = function(text) {
   };
 };
 var getConversationSentiment = function(conversation, name) {
-  sentiment = redis.get(name);
-  if (sentiment !== null && sentiment !== 0 && sentiment !== undefined) {
-    console.log("taking the easy way out, we already have a value for " + name);
-    return;
-  }
   console.log('convo sentiment:');
   if (sum[name] == undefined){
       sum[name] = 0;
@@ -124,12 +119,18 @@ router.get('/load_facebook', function(req, res, next) {
     console.log('what what');
     var conversations = get_conversations(response);
     var aggregate = [];
-    var i=0;
+    //var i=0;
     _.each(conversations, function(conversation, name){
-      if (i != 0 && i < 2){
-        aggregate.push(getConversationSentiment(conversation, name));
-      }
-      i++;
+      //if (i != 0 && i < 2){
+        redis.get(name).then(function (sentiment) {
+          if (sentiment !== null && sentiment !== 0 && sentiment !== undefined) {
+            console.log("taking the easy way out, we already have a value for " + name);
+          } else {
+            aggregate.push(getConversationSentiment(conversation, name));
+          }
+        });
+      //}
+     // i++;
     });
     console.log(aggregate);
     _.keys(conversations, function() {
