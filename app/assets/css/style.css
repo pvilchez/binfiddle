@@ -455,3 +455,102 @@ body {
   .placeholder img {
     display: inline-block;
     border-radius: 50%; }
+
+.btn-default, .btn-default:hover, .btn-default:focus {
+  color: #333;
+  text-shadow: none;
+  background-color: #fff;
+  border: 1px solid #fff; }
+
+html#cover .masthead-nav > li > a:hover, html#cover .masthead-nav > li > a:focus {
+  background-color: transparent;
+  border-bottom-color: #a9a9a9;
+  border-bottom-color: rgba(255, 255, 255, 0.25); }
+
+a {
+  color: #fff; }
+  a:focus {
+    color: #fff; }
+  a:hover {
+    color: #fff; }
+
+html#cover {
+  height: 100%;
+  background-color: #1976D2; }
+  html#cover body {
+    height: 100%;
+    background-color: #1976D2;
+    color: #fff;
+    text-align: center;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    padding-top: 0; }
+  html#cover .site-wrapper {
+    display: table;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.5); }
+  html#cover .site-wrapper-inner {
+    display: table-cell;
+    vertical-align: top; }
+  html#cover .cover-container {
+    margin-right: auto;
+    margin-left: auto; }
+  html#cover .inner {
+    padding: 30px; }
+  html#cover .masthead-brand {
+    margin-top: 10px;
+    margin-bottom: 10px; }
+  @media (min-width: 768px) {
+    html#cover .masthead-brand {
+      float: left; }
+    html#cover .masthead-nav {
+      float: right; }
+    html#cover .masthead {
+      position: fixed;
+      top: 0;
+      width: 100%; }
+    html#cover .mastfoot {
+      position: fixed;
+      bottom: 0;
+      width: 100%; }
+    html#cover .site-wrapper-inner {
+      vertical-align: middle; }
+    html#cover .cover-container {
+      width: 100%; } }
+  html#cover .cover {
+    padding: 0 20px; }
+    html#cover .cover .btn-lg {
+      padding: 10px 20px;
+      font-weight: bold; }
+  html#cover .mastfoot {
+    color: #999;
+    color: rgba(255, 255, 255, 0.5); }
+  @media (min-width: 992px) {
+    html#cover .masthead {
+      width: 700px; }
+    html#cover .mastfoot {
+      width: 700px; }
+    html#cover .cover-container {
+      width: 700px; } }
+  html#cover .masthead-nav > li {
+    display: inline-block; }
+    html#cover .masthead-nav > li + li {
+      margin-left: 20px; }
+    html#cover .masthead-nav > li > a {
+      padding-right: 0;
+      padding-left: 0;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+      color: rgba(255, 255, 255, 0.75);
+      border-bottom: 2px solid transparent; }
+  html#cover .masthead-nav > .active > a {
+    color: #fff;
+    border-bottom-color: #fff; }
+    html#cover .masthead-nav > .active > a:hover {
+      color: #fff;
+      border-bottom-color: #fff; }
+    html#cover .masthead-nav > .active > a:focus {
+      color: #fff;
+      border-bottom-color: #fff; }
