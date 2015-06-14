@@ -5,7 +5,7 @@ var _ = require('underscore');
 var https = require('https');
 var config = require('../config.js');
 var Redis = require('ioredis');
-var redis = new Redis();
+var redis = new Redis(config.redis);
 
 var sum = {};
 var average = {};
