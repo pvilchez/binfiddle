@@ -63,3 +63,169 @@ body {
         border-radius: 50%;
     }
 }
+
+//colors
+$white: #fff;
+$color_mine_shaft_approx: #333;
+$black_50: rgba(0,0,0,.5);
+$white_75: rgba(255,255,255,.75);
+$color_shady_lady_approx: #a9a9a9;
+$white_25: rgba(255,255,255,.25);
+$color_mountain_mist_approx: #999;
+$white_50: rgba(255,255,255,.5);
+
+//@extend-elements
+//original selectors
+//.btn-default, .btn-default:hover, .btn-default:focus
+%extend_1 {
+    color: $color_mine_shaft_approx;
+    //Instead of the line below you could use @includetext-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+    text-shadow: none;
+    background-color: $white;
+    border: 1px solid $white;
+}
+
+//original selectors
+//.masthead-nav > li > a:hover, .masthead-nav > li > a:focus
+%extend_2 {
+    background-color: transparent;
+    border-bottom-color: $color_shady_lady_approx;
+    border-bottom-color: $white_25;
+}
+
+
+a {
+    color: $white;
+    &:focus {
+        color: $white;
+    }
+    &:hover {
+        color: $white;
+    }
+}
+.btn-default {
+    @extend %extend_1;
+    &:hover {
+        @extend %extend_1;
+    }
+    &:focus {
+        @extend %extend_1;
+    }
+}
+html#cover {
+    height: 100%;
+    background-color: $primary-color-dark;
+body {
+    height: 100%;
+    background-color: $primary-color-dark;
+    color: $white;
+    text-align: center;
+    //Instead of the line below you could use @includetext-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+    text-shadow: 0 1px 3px $black_50;
+    padding-top: 0;
+}
+.site-wrapper {
+    display: table;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    //Instead of the line below you could use @includebox-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
+    box-shadow: inset 0 0 100px $black_50;
+}
+.site-wrapper-inner {
+    display: table-cell;
+    vertical-align: top;
+}
+.cover-container {
+    margin-right: auto;
+    margin-left: auto;
+}
+.inner {
+    padding: 30px;
+}
+.masthead-brand {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+@media(min-width: 768px) {
+    .masthead-brand {
+        float: left;
+    }
+    .masthead-nav {
+        float: right;
+    }
+    .masthead {
+        position: fixed;
+        top: 0;
+        width: 100%;
+    }
+    .mastfoot {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+    .site-wrapper-inner {
+        vertical-align: middle;
+    }
+    .cover-container {
+        width: 100%;
+    }
+}
+.cover {
+    padding: 0 20px;
+    .btn-lg {
+        padding: 10px 20px;
+        font-weight: bold;
+    }
+}
+.mastfoot {
+    color: $color_mountain_mist_approx;
+    color: $white_50;
+}
+@media(min-width: 992px) {
+    .masthead {
+        width: 700px;
+    }
+    .mastfoot {
+        width: 700px;
+    }
+    .cover-container {
+        width: 700px;
+    }
+}
+.masthead-nav > {
+    li {
+        display: inline-block;
+        + li {
+            margin-left: 20px;
+        }
+        > a {
+            padding-right: 0;
+            padding-left: 0;
+            font-size: 16px;
+            font-weight: bold;
+            color: $white;
+            color: $white_75;
+            border-bottom: 2px solid transparent;
+            &:hover {
+                @extend %extend_2;
+            }
+            &:focus {
+                @extend %extend_2;
+            }
+        }
+    }
+    .active > a {
+        color: $white;
+        border-bottom-color: $white;
+        &:hover {
+            color: $white;
+            border-bottom-color: $white;
+        }
+        &:focus {
+            color: $white;
+            border-bottom-color: $white;
+        }
+    }
+}
+}
